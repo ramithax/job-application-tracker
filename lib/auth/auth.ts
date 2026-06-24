@@ -1,12 +1,14 @@
 import { betterAuth } from "better-auth";
-import { memoryAdapter } from "better-auth/adapters/memory";
+import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { MongoClient } from "mongodb";
+
+const client = new MongoClient(process.env.NEXT_PUBLIC_BETTER_AUTH_URL!);
+
+const db = client.db();
 
 export const auth = betterAuth({
-    database: memoryAdapter({
-        user: [],
-        session: [],
-        account: [],
-        verification: [],
+    database: mongodbAdapter(db, {
+        client,
     }),
     emailAndPassword: {
         enabled: true,
