@@ -68,10 +68,10 @@ export default function SignUp() {
             <Card className="w-full max-w-md border border-gray-200 shadow-md">
 
                 <CardHeader className="space-y-2">
-                    <CardTitle className="text-2xl font-semibold text-gray-900">
+                    <CardTitle className="text-2xl font-semibold text-gray-900 text-center">
                         Sign Up
                     </CardTitle>
-                    <CardDescription className="text-gray-500">
+                    <CardDescription className="text-gray-500 text-center">
                         Create an account to get started
                     </CardDescription>
                 </CardHeader>
@@ -82,7 +82,7 @@ export default function SignUp() {
 
                         {
                             error && (
-                                <div className="text-red-500 text-sm">{error}</div>
+                                <div className="text-red-500 text-sm text-center">{error}</div>
                             )
                         }
 
