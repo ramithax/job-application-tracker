@@ -13,41 +13,34 @@ const DEFAULT_COLUMNS = [
 ];
 
 export async function initUserBoard(userId: string) {
+    await connectDB();
 
-    try {
-        await connectDB();
+    const existingBoard = await Board.findOne({
+        userId,
+        name: "Job Hunt"
+    });
 
-        const existingBoard = await Board.findOne({
-            userId,
-            name: "Job Hunt"
-        })
+    if (existingBoard) return existingBoard;
 
-        if (existingBoard) {
-            return existingBoard;
-        }
+    const board = await Board.create({
+        userId,
+        name: "Job Hunt",
+        columns: []
+    });
 
-        //create the board
-        const board = await Board.create({
-            userId,
-            name: "Job Hunt",
-            columns: [],
-        })
-
-        const columns = await Promise.all(DEFAULT_COLUMNS.map(
-            (col) => Column.create({
+    const columns = await Promise.all(
+        DEFAULT_COLUMNS.map(col =>
+            Column.create({
                 name: col.name,
                 order: col.order,
                 boardId: board._id,
                 jobApplication: []
             })
-        ))
+        )
+    );
 
-        board.columns = columns.map((col) => col._id);
-        await board.save();
-        return board;
-    }
-    catch (error) {
-        throw error;
-    }
+    board.columns = columns.map(col => col._id);
+    await board.save();
 
+    return board;
 }
