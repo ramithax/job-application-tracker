@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { useState } from "react";
+import { CreateJobApplication } from "@/lib/actions/job-applicartions";
 
 
 export interface CreateJobApplicationDialogProps {
@@ -32,6 +33,22 @@ export default function CreateJobApplicationDialog({ columnId, boardId }: Create
         e.preventDefault();
 
         try {
+
+            const result = await CreateJobApplication({
+                ...formData,
+                columnId,
+                boardId,
+                tags: formData.tags.split(",").map((tag) => tag.trim())
+                    .filter((tag) => tag.length > 0),
+            })
+
+            if (!result.error) {
+                setFormData(INITIAL_FORM_DATA);
+                setOpen(false)
+            }
+            else {
+                console.log("Error creating job application", result.error)
+            }
 
         }
         catch (error) {
