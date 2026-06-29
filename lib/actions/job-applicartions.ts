@@ -1,5 +1,6 @@
 "use server"
 
+import { revalidatePath } from "next/cache";
 import { getSession } from "../auth/auth";
 import connectDB from "../db";
 import { Board, Column, JobApplication } from "../model";
@@ -91,6 +92,8 @@ export async function CreateJobApplication(data: CreateJobApplication) {
     await Column.findByIdAndUpdate(columnId, {
         $push: { jobApplications: jobApplication._id },
     });
+
+    revalidatePath("/dashboard")
 
     return { data: JSON.parse(JSON.stringify(jobApplication)) }
 }
