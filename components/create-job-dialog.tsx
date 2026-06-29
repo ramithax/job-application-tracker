@@ -1,7 +1,10 @@
+"use client"
+
 import { Plus } from "lucide-react";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { Input } from "./ui/input";
+import { useState } from "react";
 
 
 export interface CreateJobApplicationDialogProps {
@@ -9,10 +12,37 @@ export interface CreateJobApplicationDialogProps {
     boardId: string;
 }
 
+const INITIAL_FORM_DATA = {
+    company: "",
+    position: "",
+    location: "",
+    notes: "",
+    salary: "",
+    jobUrl: "",
+    tags: "",
+    description: "",
+};
+
 export default function CreateJobApplicationDialog({ columnId, boardId }: CreateJobApplicationDialogProps) {
+
+    const [open, setOpen] = useState<boolean>(false);
+    const [formData, setFormData] = useState(INITIAL_FORM_DATA);
+
+    async function handleOnSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        try {
+
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+
     return (
 
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen} >
             <DialogTrigger asChild>
                 <Button
                     variant="outline"
@@ -31,7 +61,7 @@ export default function CreateJobApplicationDialog({ columnId, boardId }: Create
                 </DialogHeader>
 
                 {/* FORM */}
-                <form className="space-y-6 pt-4">
+                <form className="space-y-6 pt-4" onSubmit={handleOnSubmit}>
 
                     {/* BASIC INFO */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -39,14 +69,20 @@ export default function CreateJobApplicationDialog({ columnId, boardId }: Create
                             <label htmlFor="company" className="text-sm font-medium">
                                 Company
                             </label>
-                            <Input id="company" placeholder="e.g. Google" required />
+                            <Input id="company" placeholder="e.g. Google" required value={formData.company}
+                                onChange={(e) =>
+                                    setFormData({ ...formData, company: e.target.value })
+                                } />
                         </div>
 
                         <div className="space-y-2">
                             <label htmlFor="position" className="text-sm font-medium">
                                 Position
                             </label>
-                            <Input id="position" placeholder="e.g. Software Engineer" required />
+                            <Input id="position" placeholder="e.g. Software Engineer" required value={formData.position}
+                                onChange={(e) =>
+                                    setFormData({ ...formData, position: e.target.value })
+                                } />
                         </div>
                     </div>
 
@@ -56,14 +92,20 @@ export default function CreateJobApplicationDialog({ columnId, boardId }: Create
                             <label htmlFor="location" className="text-sm font-medium">
                                 Location
                             </label>
-                            <Input id="location" placeholder="e.g. Remote / Colombo" />
+                            <Input id="location" placeholder="e.g. Remote / Colombo" value={formData.location}
+                                onChange={(e) =>
+                                    setFormData({ ...formData, location: e.target.value })
+                                } />
                         </div>
 
                         <div className="space-y-2">
                             <label htmlFor="salary" className="text-sm font-medium">
                                 Salary
                             </label>
-                            <Input id="salary" placeholder="e.g. $2000/month" />
+                            <Input id="salary" placeholder="e.g. $2000/month" value={formData.salary}
+                                onChange={(e) =>
+                                    setFormData({ ...formData, salary: e.target.value })
+                                } />
                         </div>
                     </div>
 
@@ -72,7 +114,10 @@ export default function CreateJobApplicationDialog({ columnId, boardId }: Create
                         <label htmlFor="jobURL" className="text-sm font-medium">
                             Job URL
                         </label>
-                        <Input id="jobURL" placeholder="https://..." />
+                        <Input id="jobURL" placeholder="https://..." value={formData.jobUrl}
+                            onChange={(e) =>
+                                setFormData({ ...formData, jobUrl: e.target.value })
+                            } />
                     </div>
 
                     {/* TAGS */}
@@ -80,7 +125,10 @@ export default function CreateJobApplicationDialog({ columnId, boardId }: Create
                         <label htmlFor="tags" className="text-sm font-medium">
                             Tags
                         </label>
-                        <Input id="tags" placeholder="Frontend, Remote, Internship" />
+                        <Input id="tags" placeholder="Frontend, Remote, Internship" value={formData.tags}
+                            onChange={(e) =>
+                                setFormData({ ...formData, tags: e.target.value })
+                            } />
                     </div>
 
                     {/* NOTES */}
@@ -92,12 +140,15 @@ export default function CreateJobApplicationDialog({ columnId, boardId }: Create
                             id="notes"
                             placeholder="Add any notes..."
                             className="w-full min-h-[100px] rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
-                        />
+                            value={formData.notes}
+                            onChange={(e) =>
+                                setFormData({ ...formData, notes: e.target.value })
+                            } />
                     </div>
 
                     {/* FOOTER */}
                     <DialogFooter className="pt-2">
-                        <Button type="button" variant="outline">
+                        <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                             Cancel
                         </Button>
                         <Button type="submit">
