@@ -1,5 +1,4 @@
 import connectDB from "../lib/db";
-import "@/lib/models";
 import { Board, Column, JobApplication } from "@/lib/model";
 
 const USER_ID = "6a3fa2e1285351f88fe8a1c2";
